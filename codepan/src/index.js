@@ -6,8 +6,9 @@ import App from '@/components/App'
 import router from '@/router'
 import store from '@/store'
 
-import VueSocketIO from 'vue-socket.io'
-import socketio from 'socket.io-client'
+import io from 'socket.io-client';
+const socket = io('localhost:3001');
+
 
 Vue.config.productionTip = false
 
@@ -15,13 +16,22 @@ Vue.use(Tippy, {
   position: 'bottom'
 })
 
-new Vue({
+let app = new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
 })
 
+socket.on('connect', () => {
+  console.log(socket.id);
+  app.$store.dispatch('setSocketId', socket.id);
+});
+
 if (process.env.NODE_ENV === 'production') {
   require('./pwa')
+}
+
+export {
+  socket
 }

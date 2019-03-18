@@ -18,6 +18,7 @@ import progress from 'nprogress'
 import api from '@/utils/github-api'
 import req from 'reqjs'
 import Event from '@/utils/event'
+import { socket } from '../index';
 
 Vue.use(Vuex)
 
@@ -80,9 +81,16 @@ const store = new Vuex.Store({
     socketId: null
   },
   mutations: {
-    UPDATE_CODE(state, { type, code }) {
+    UPDATE_CODE(state, { type, code, id }) {
       console.log(`type:${type}`)
-      state[type].code = code
+      state[type].code = code;
+
+      socket.emit(type, {
+        code,
+        id
+      });
+
+      // should do socket call here
     },
     UPDATE_TRANSFORMER(state, { type, transformer }) {
       state[type].transformer = transformer

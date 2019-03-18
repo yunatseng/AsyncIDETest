@@ -29,6 +29,7 @@
 
 <script>
 import io from 'socket.io-client';
+import { socket } from '../index.js';
 
 export default {
     data() {
@@ -36,14 +37,14 @@ export default {
             user: '',
             message: '',
             messages: [],
-            socket : io('localhost:3001')
+            // socket : io('localhost:3001')
         }
     },
     methods: {
         sendMessage(e) {
             e.preventDefault();
 
-            this.socket.emit('SEND_MESSAGE', {
+            socket.emit('SEND_MESSAGE', {
                 user: this.user,
                 message: this.message
             });
@@ -52,28 +53,29 @@ export default {
     },
 
     mounted() {
-
-        this.socket.on('connect', () => {
-          console.log(this.socket.id);
-          this.$store.dispatch('setSocketId', this.socket.id);
-        });
-
-        this.socket.on('MESSAGE', (data) => {
+      let vuexSocketId = this.$store.state.socketId;
+        socket.on('MESSAGE', (data) => {
             this.messages = [...this.messages, data];
             // you can also do this.messages.push(data)
         });
-        this.socket.on('html_code', (data) => {
-          this.$store.dispatch('updateCode', { type: 'html', code: data })
+        socket.on('html_code', (data) => {
+          if (vuexSocketId === data.id) return;
+          if (this.$store.state.html.code === data.code) return;
+          this.$store.dispatch('updateCode', { type: 'html', code: data.code })
           this.$store.dispatch('editorChanged')
           console.log('html')
           console.log(this.$store['html'])
         });
-        this.socket.on('css_code', (data) => {
-          this.$store.dispatch('updateCode', { type: 'css', code: data })
+        socket.on('css_code', (data) => {
+          if (vuexSocketId === data.id) return;
+          if (this.$store.state.css.code === data.code) return;
+          this.$store.dispatch('updateCode', { type: 'css', code: data.code })
           this.$store.dispatch('editorChanged')
         });
-        this.socket.on('js_code', (data) => {
-          this.$store.dispatch('updateCode', { type: 'js', code: data })
+        socket.on('js_code', (data) => {
+          if (vuexSocketId === data.id) return;
+          if (this.$store.state.js.code === data.code) return;
+          this.$store.dispatch('updateCode', { type: 'js', code: data.code })
           this.$store.dispatch('editorChanged')
         });
     }

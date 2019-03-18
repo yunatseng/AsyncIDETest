@@ -27,6 +27,7 @@ import getScripts from '@/utils/get-scripts'
 import proxyConsole from '!raw-loader!babel-loader?presets[]=babili&-babelrc!buble-loader!@/utils/proxy-console'
 import SvgIcon from './SvgIcon.vue'
 import io from 'socket.io-client';
+import {socket} from '../index.js'
 
 const sandboxAttributes = [
   'allow-modals',
@@ -71,7 +72,7 @@ export default {
   data() {
     return {
       style: {},
-      socket: io('localhost:3001')
+      // socket: io('localhost:3001')
     }
   },
   watch: {
@@ -156,6 +157,8 @@ export default {
     },
 
     async run() {
+      console.log('run called');
+
       this.setIframeStatus('loading')
       let js
       // We may add preprocessors supports for html/css in the future
@@ -171,27 +174,27 @@ export default {
             .then(code => getScripts(code, scripts))
             .then(code => {
               js = code
-              this.socket.emit('js', {
-                code,
-                id: this.$store.state.socketId
-              })
+              // socket.emit('js', {
+              //   code,
+              //   id: this.$store.state.socketId
+              // })
             }),
           transform.html(this.html)
             .then(code => {
               html = code
-              this.socket.emit('html', {
-                code,
-                id: this.$store.state.socketId
-              })
+              // socket.emit('html', {
+              //   code,
+              //   id: this.$store.state.socketId
+              // })
               // console.log(code)
             }),
           transform.css(this.css)
             .then(code => {
               css = code
-              this.socket.emit('css', {
-                code,
-                id: this.$store.state.socketId
-              })
+              // socket.emit('css', {
+              //   code,
+              //   id: this.$store.state.socketId
+              // })
             })
         ])
 

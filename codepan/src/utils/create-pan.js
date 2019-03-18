@@ -48,11 +48,11 @@ export default ({ name, editor, components } = {}) => {
       [`${name}.code`](e) {
         // this.editor.focus()
 
+        console.log(this[name].code);
+
+        // todo onchange cannot be called here
         // this.editor.setValue(this[name].code);
         // this.editor.setCursor({line: 1, ch: 5});
-
-        // Event.$emit('run')
-
         if (this.autoRun) {
           this.debounceRunCode()
         }
@@ -64,11 +64,7 @@ export default ({ name, editor, components } = {}) => {
         readOnly: 'readonly' in this.$route.query
       })
       this.editor.on('change', (e, t) => {
-        // e.preventDefault();
-        console.log('e', e, 't', t);
-        // console.log('changed', e, this.editor.getCursor());
-        // debugger;
-        this.updateCode({ code: e.getValue(), type: name, id: this.$store.socketId }) //cast to vuex
+        this.updateCode({ code: e.getValue(), type: name, id: this.$store.state.socketId }) //cast to vuex
         this.editorChanged()
         this.editor.focus();
 
