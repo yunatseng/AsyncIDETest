@@ -76,7 +76,8 @@ const store = new Vuex.Store({
     userMeta: JSON.parse(localStorage.getItem('codepan:user-meta')) || {},
     editorStatus: 'saved',
     iframeStatus: null,
-    transforming: false
+    transforming: false,
+    socketId: null
   },
   mutations: {
     UPDATE_CODE(state, { type, code }) {
@@ -128,11 +129,17 @@ const store = new Vuex.Store({
     },
     SET_TRANSFORM(state, status) {
       state.transforming = status
+    },
+    SET_SOCKETID(state, id) {
+      state.socketId = id
     }
   },
   actions: {
     async updateCode({ commit }, payload) {
       await commit('UPDATE_CODE', payload)
+    },
+    setSocketId({commit}, payload) {
+      commit('SET_SOCKETID', payload)
     },
     updateError({ commit }, payload) {
       commit('UPDATE_ERROR', payload)

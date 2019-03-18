@@ -14,7 +14,7 @@ const server = app.listen(3001, function() {
 const io = require('socket.io')(server);
 
 io.on('connection', function(socket) {
-    console.log(socket.id)
+    // console.log(socket.id)
     socket.on('SEND_MESSAGE', function(data) {
         console.log(data)
         io.emit('MESSAGE', data)

@@ -50,7 +50,14 @@ export default {
             this.message = ''
         }
     },
+
     mounted() {
+
+        this.socket.on('connect', () => {
+          console.log(this.socket.id);
+          this.$store.dispatch('setSocketId', this.socket.id);
+        });
+
         this.socket.on('MESSAGE', (data) => {
             this.messages = [...this.messages, data];
             // you can also do this.messages.push(data)

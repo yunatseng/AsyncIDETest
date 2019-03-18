@@ -17,7 +17,7 @@ import 'codemirror/addon/fold/xml-fold'
 import 'codemirror/addon/fold/markdown-fold'
 import 'codemirror/addon/fold/comment-fold'
 
-123;
+
 
 const isMac = CodeMirror.keyMap.default === CodeMirror.keyMap.macDefault
 

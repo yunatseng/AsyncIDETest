@@ -45,10 +45,13 @@ export default ({ name, editor, components } = {}) => {
         const mode = getEditorModeByTransfomer(val)
         this.editor.setOption('mode', mode)
       },
-      [`${name}.code`]() {
+      [`${name}.code`](e) {
         // this.editor.focus()
-        this.editor.setValue(this[name].code)
-        this.editor.setCursor({line: 1, ch: 5})
+
+        // this.editor.setValue(this[name].code);
+        // this.editor.setCursor({line: 1, ch: 5});
+
+        // Event.$emit('run')
 
         if (this.autoRun) {
           this.debounceRunCode()
@@ -60,10 +63,15 @@ export default ({ name, editor, components } = {}) => {
         ...editor,
         readOnly: 'readonly' in this.$route.query
       })
-      this.editor.on('change', e => {
-        this.updateCode({ code: e.getValue(), type: name })
+      this.editor.on('change', (e, t) => {
+        // e.preventDefault();
+        console.log('e', e, 't', t);
+        // console.log('changed', e, this.editor.getCursor());
+        // debugger;
+        this.updateCode({ code: e.getValue(), type: name, id: this.$store.socketId }) //cast to vuex
         this.editorChanged()
-        this.editor.focus()
+        this.editor.focus();
+
       })
       this.editor.on('focus', () => {
         if (this.activePan !== name && this.visiblePans.indexOf(name) > -1) {

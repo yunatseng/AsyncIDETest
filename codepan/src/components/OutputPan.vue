@@ -171,18 +171,27 @@ export default {
             .then(code => getScripts(code, scripts))
             .then(code => {
               js = code
-              this.socket.emit('js', code)
+              this.socket.emit('js', {
+                code,
+                id: this.$store.state.socketId
+              })
             }),
           transform.html(this.html)
             .then(code => {
               html = code
-              this.socket.emit('html', code)
+              this.socket.emit('html', {
+                code,
+                id: this.$store.state.socketId
+              })
               // console.log(code)
             }),
           transform.css(this.css)
             .then(code => {
               css = code
-              this.socket.emit('css', code)
+              this.socket.emit('css', {
+                code,
+                id: this.$store.state.socketId
+              })
             })
         ])
 
