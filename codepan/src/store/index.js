@@ -78,18 +78,13 @@ const store = new Vuex.Store({
     editorStatus: 'saved',
     iframeStatus: null,
     transforming: false,
-    socketId: null
+    socketId: null,
+    sender: null
   },
   mutations: {
     UPDATE_CODE(state, { type, code, id }) {
       console.log(`type:${type}`)
       state[type].code = code;
-
-      socket.emit(type, {
-        code,
-        id
-      });
-
       // should do socket call here
     },
     UPDATE_TRANSFORMER(state, { type, transformer }) {
@@ -140,6 +135,9 @@ const store = new Vuex.Store({
     },
     SET_SOCKETID(state, id) {
       state.socketId = id
+    },
+    SET_SENDER(state, id) {
+      state.sender = id;
     }
   },
   actions: {
@@ -148,6 +146,9 @@ const store = new Vuex.Store({
     },
     setSocketId({commit}, payload) {
       commit('SET_SOCKETID', payload)
+    },
+    setSenderId({commit}, payload) {
+      commit('SET_SENDER', payload);
     },
     updateError({ commit }, payload) {
       commit('UPDATE_ERROR', payload)

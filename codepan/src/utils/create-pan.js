@@ -6,7 +6,8 @@ import CompiledCodeSwitcher from '@/components/CompiledCodeSwitcher.vue'
 import createEditor from '@/utils/create-editor'
 import Event from '@/utils/event'
 import panPosition from '@/utils/pan-position'
-import { hasNextPan, getHumanlizedTransformerName, getEditorModeByTransfomer } from '@/utils'
+import { hasNextPan, getHumanlizedTransformerName, getEditorModeByTransfomer } from '@/utils';
+import { socket } from '../index';
 
 export default ({ name, editor, components } = {}) => {
   return {
@@ -17,7 +18,7 @@ export default ({ name, editor, components } = {}) => {
       }
     },
     computed: {
-      ...mapState([name, 'visiblePans', 'activePan', 'autoRun']),
+      ...mapState([name, 'visiblePans', 'activePan', 'autoRun', 'sender', 'socketId']),
       ...mapState({
         isVisible: state => state.visiblePans.indexOf(name) !== -1
       }),
@@ -47,15 +48,16 @@ export default ({ name, editor, components } = {}) => {
       },
       [`${name}.code`](e) {
         // this.editor.focus()
+        let code = this[name].code;
+        let sender = this.sender;
+        let me = this.socketId;
 
-        console.log(this[name].code);
-
-        // todo onchange cannot be called here
-        // this.editor.setValue(this[name].code);
-        // this.editor.setCursor({line: 1, ch: 5});
-        if (this.autoRun) {
-          this.debounceRunCode()
-        }
+        if (sender === me) return;
+        this.editor.setValue(code);
+        this.editor.setCursor({line: 1, ch: 5});
+        // if (this.autoRun) {
+        //   this.debounceRunCode()
+        // }
       }
     },
     mounted() {
@@ -63,12 +65,22 @@ export default ({ name, editor, components } = {}) => {
         ...editor,
         readOnly: 'readonly' in this.$route.query
       })
-      this.editor.on('change', (e, t) => {
-        this.updateCode({ code: e.getValue(), type: name, id: this.$store.state.socketId }) //cast to vuex
+      this.editor.on('change',  debounce((e, t) => {
+        let code = e.getValue();
+        let id = this.socketId;
+        this.updateCode({ code, type: name, id }) //cast to vuex
+        this.setSenderId(id);
         this.editorChanged()
+        socket.emit(name, {
+          code,
+          id
+        }); // direct emit
+        Event.$emit('run')
+
+
         this.editor.focus();
 
-      })
+      }, 500))
       this.editor.on('focus', () => {
         if (this.activePan !== name && this.visiblePans.indexOf(name) > -1) {
           this.setActivePan(name)
@@ -93,7 +105,7 @@ export default ({ name, editor, components } = {}) => {
       })
     },
     methods: {
-      ...mapActions(['updateCode', 'updateTransformer', 'setActivePan', 'editorChanged']),
+      ...mapActions(['updateCode', 'updateTransformer', 'setActivePan', 'editorChanged', 'setSenderId']),
       async setTransformer(transformer) {
         await this.updateTransformer({ type: name, transformer })
       },

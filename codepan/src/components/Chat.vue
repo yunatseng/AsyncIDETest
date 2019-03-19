@@ -61,7 +61,8 @@ export default {
         socket.on('html_code', (data) => {
           if (vuexSocketId === data.id) return;
           if (this.$store.state.html.code === data.code) return;
-          this.$store.dispatch('updateCode', { type: 'html', code: data.code })
+          this.$store.dispatch('updateCode', { type: 'html', code: data.code });
+          this.$store.dispatch('setSenderId', data.id);
           this.$store.dispatch('editorChanged')
           console.log('html')
           console.log(this.$store['html'])
@@ -69,13 +70,15 @@ export default {
         socket.on('css_code', (data) => {
           if (vuexSocketId === data.id) return;
           if (this.$store.state.css.code === data.code) return;
-          this.$store.dispatch('updateCode', { type: 'css', code: data.code })
+          this.$store.dispatch('updateCode', { type: 'css', code: data.code });
+          this.$store.dispatch('setSenderId', data.id);
           this.$store.dispatch('editorChanged')
         });
         socket.on('js_code', (data) => {
           if (vuexSocketId === data.id) return;
           if (this.$store.state.js.code === data.code) return;
-          this.$store.dispatch('updateCode', { type: 'js', code: data.code })
+          this.$store.dispatch('updateCode', { type: 'js', code: data.code });
+          this.$store.dispatch('setSenderId', data.id);
           this.$store.dispatch('editorChanged')
         });
     }
