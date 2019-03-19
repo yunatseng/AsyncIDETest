@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon --inspect app.js",
+    "start": "nodemon --inspect=9004 app.js",
     "dev": "node app.js"
   },
   "author": "",

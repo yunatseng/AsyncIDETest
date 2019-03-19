@@ -32,15 +32,18 @@ const sortPans = ps => {
 const emptyPans = () => ({
   js: {
     code: '',
-    transformer: 'js'
+    transformer: 'js',
+    position:  {line: 0, ch: 0, sticky: null}
   },
   css: {
     code: '',
-    transformer: 'css'
+    transformer: 'css',
+    position:  {line: 0, ch: 0, sticky: null}
   },
   html: {
     code: '',
-    transformer: 'html'
+    transformer: 'html',
+    position:  {line: 0, ch: 0, sticky: null}
   }
 })
 
@@ -82,9 +85,10 @@ const store = new Vuex.Store({
     sender: null
   },
   mutations: {
-    UPDATE_CODE(state, { type, code, id }) {
+    UPDATE_CODE(state, { type, code, position }) {
       console.log(`type:${type}`)
       state[type].code = code;
+      state[type].position = position
       // should do socket call here
     },
     UPDATE_TRANSFORMER(state, { type, transformer }) {

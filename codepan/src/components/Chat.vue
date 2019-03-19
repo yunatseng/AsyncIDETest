@@ -58,28 +58,18 @@ export default {
             this.messages = [...this.messages, data];
             // you can also do this.messages.push(data)
         });
-        socket.on('html_code', (data) => {
+
+        socket.on('code', (data) => {
           if (vuexSocketId === data.id) return;
-          if (this.$store.state.html.code === data.code) return;
-          this.$store.dispatch('updateCode', { type: 'html', code: data.code });
+          console.log(data);
+          Object.keys(data.settings).forEach(el => {
+            if (this.$store.state[el].code === data.settings[el].code) return;
+            this.$store.dispatch('updateCode', { type: el, code: data.settings[el].code, position: data.settings[el].position });
+          });
+
           this.$store.dispatch('setSenderId', data.id);
           this.$store.dispatch('editorChanged')
-          console.log('html')
-          console.log(this.$store['html'])
-        });
-        socket.on('css_code', (data) => {
-          if (vuexSocketId === data.id) return;
-          if (this.$store.state.css.code === data.code) return;
-          this.$store.dispatch('updateCode', { type: 'css', code: data.code });
-          this.$store.dispatch('setSenderId', data.id);
-          this.$store.dispatch('editorChanged')
-        });
-        socket.on('js_code', (data) => {
-          if (vuexSocketId === data.id) return;
-          if (this.$store.state.js.code === data.code) return;
-          this.$store.dispatch('updateCode', { type: 'js', code: data.code });
-          this.$store.dispatch('setSenderId', data.id);
-          this.$store.dispatch('editorChanged')
+
         });
     }
 }
