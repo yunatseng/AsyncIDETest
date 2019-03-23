@@ -1,15 +1,11 @@
-Synchronized Codepan
-====================
+# Synchronized Codepan
 
 ## require
-----------
 
 - Node 
 - Yarn
 
-
 ## start
-----------
 
 ```sh
 # Install project module
