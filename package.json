@@ -1,9 +1,12 @@
 {
-  "name": "AsyncIDE",
+  "name": "async-ide",
   "version": "1.0.0",
   "description": "Synchronized Codepan ====================",
   "main": "index.js",
   "scripts": {
+    "install":"run-p init-codepan init-server",
+    "init-codepan":"cd codepan && yarn", 
+    "init-server":"cd server && yarn",
     "dev": "run-p run-codepan run-server",
     "run-codepan": "cd codepan && yarn dev", 
     "run-server": "cd server && yarn dev"
