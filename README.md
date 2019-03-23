@@ -9,7 +9,7 @@
 
 ```sh
 # Install project module
- $ yarn install
+$ yarn install
  
 # Run the Socket.io & codepan server
 $ yarn dev
