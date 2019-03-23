@@ -2,7 +2,7 @@
   <div class="card mt-3">
       <div class="card-body">
           <div class="card-title">
-              <h3>Chat Group</h3>
+              <h3>意見交流區</h3>
               <hr>
           </div>
           <div class="card-body">
@@ -14,14 +14,14 @@
       <div class="card-footer">
           <form @submit.prevent="sendMessage">
               <div class="gorm-group">
-                  <label for="user">User:</label>
+                  <label for="user">使用者名稱:</label>
                   <input type="text" v-model="user" class="form-control">
               </div>
               <div class="gorm-group pb-3">
-                  <label for="message">Message:</label>
+                  <label for="message">訊息:</label>
                   <input type="text" v-model="message" class="form-control">
               </div>
-              <button type="submit" class="btn btn-success">Send</button>
+              <button type="submit" class="btn btn-success">送出</button>
           </form>
       </div>
   </div>

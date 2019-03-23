@@ -8,7 +8,7 @@
         <el-button
           icon="el-icon-document"
           size="mini">
-          Boilerplates
+          樣板
         </el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="empty">Empty</el-dropdown-item>
@@ -30,7 +30,7 @@
         icon="el-icon-plus"
         @click="promptLibrary"
         size="mini">
-        Add library
+        新增套件
       </el-button>
       <span class="home-header-left-item changelog-indicator"></span>
     </div>
@@ -76,7 +76,7 @@
         :value="autoRun"
         v-if="!inIframe"
         @change="setAutoRun">
-        Auto-run
+        自動執行
       </el-checkbox>
       <el-button
         :icon="iframeStatusIcon"
@@ -85,7 +85,7 @@
         class="home-header-right-item"
         plain
         @click="runCode">
-        Run
+        執行
       </el-button>
       <el-button
         v-if="!inIframe"
@@ -97,7 +97,7 @@
         v-tippy="{position: 'bottom'}"
         class="home-header-right-item"
         @click="saveGist">
-        Save
+        儲存
       </el-button>
       <el-dropdown
         v-if="!inIframe"
@@ -113,7 +113,7 @@
           <el-dropdown-item command="github-login">
             <div class="fake-anchor">
               <log-out-icon v-if="githubToken" />
-              <github-icon v-else /> GitHub {{ githubToken ? 'Logout' : 'Login' }}
+              <github-icon v-else /> GitHub {{ githubToken ? '登出' : '登入' }}
             </div>
           </el-dropdown-item>
           <el-dropdown-item
@@ -127,10 +127,10 @@
             </div>
           </el-dropdown-item>
           <el-dropdown-item style="padding: 0;">
-            <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://github.com/egoist/codepan"><link2-icon></link2-icon> Source Code</a>
+            <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://github.com/egoist/codepan"><link2-icon></link2-icon> 原始碼</a>
           </el-dropdown-item>
           <el-dropdown-item style="padding: 0;">
-            <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://twitter.com/_egoistlily"><twitter-icon></twitter-icon> Follow me on Twitter</a>
+            <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://twitter.com/_egoistlily"><twitter-icon></twitter-icon> Twitter 追蹤</a>
           </el-dropdown-item>
           <el-dropdown-item style="padding: 0;">
             <a
@@ -138,7 +138,7 @@
               class="el-dropdown-menu__item fake-anchor"
               :href="`https://github.com/egoist/codepan/commit/${latestCommit}`">
               <info-icon></info-icon>
-              {{ version }}
+              版本：{{ version }}
             </a>
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -226,9 +226,9 @@
         this.$store.dispatch('setAutoRun', status)
       },
       async promptLibrary() {
-        const { value } = await MessageBox.prompt('Type an npm package name:', 'Add Library', {
-          confirmButtonText: 'Confirm',
-          cancelButtonText: 'Cancel'
+        const { value } = await MessageBox.prompt('請輸入欲加入的 npm 套件名稱:', '新增套件', {
+          confirmButtonText: '確定',
+          cancelButtonText: '取消'
         })
         this.addLibrary(value)
       },
