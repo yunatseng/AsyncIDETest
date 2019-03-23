@@ -4,30 +4,21 @@ Synchronized Codepan
 Quickstart
 ----------
 
-### Run the Socket.io server
+### Install project module
 
-1. Go to /server directory
+1. cd project 
 
-2. Install necessary module
+2. install necessary module
 ```
- $ yarn
+ $ yarn install
 ```
 
-3. Run server
+### Run the Socket.io & codepan server
+
+1. cd project
+
+2. run both of the servers
 ```
  $ yarn dev
 ```
 
-### Run codepan server
-
-1. Go to /codepan directory
-
-2. Install necessary module
-```
- $ yarn
-```
-
-3. Run server
-```
- $ yarn dev
-```
