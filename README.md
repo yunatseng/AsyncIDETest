@@ -1,24 +1,20 @@
 Synchronized Codepan
 ====================
 
-Quickstart
+## require
 ----------
 
-### Install project module
+- Node 
+- Yarn
 
-1. cd project 
 
-2. install necessary module
-```
+## start
+----------
+
+```sh
+# Install project module
  $ yarn install
+ 
+# Run the Socket.io & codepan server
+$ yarn dev
 ```
-
-### Run the Socket.io & codepan server
-
-1. cd project
-
-2. run both of the servers
-```
- $ yarn dev
-```
-
