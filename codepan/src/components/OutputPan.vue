@@ -71,7 +71,7 @@ export default {
   data() {
     return {
       style: {},
-      socket: io('localhost:3001')
+      // socket: io('localhost:3001')
     }
   },
   watch: {

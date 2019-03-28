@@ -17,21 +17,21 @@ io.on('connection', function(socket) {
     console.log(socket.id)
     socket.on('SEND_MESSAGE', function(data) {
         console.log(data)
-        io.emit('MESSAGE', data)
+        socket.broadcast.emit('MESSAGE', data)
     });
     
     socket.on('html', function(data) {
-        io.emit('html_code', data)
+        socket.broadcast.emit('html_code', data)
         console.log(`data:${data}`)
     })
     
     socket.on('js', function(data) {
-        io.emit('js_code', data)
+        socket.broadcast.emit('js_code', data)
         console.log(`data:${data}`)
     })
     
     socket.on('css', function(data) {
-        io.emit('css_code', data)
+        socket.broadcast.emit('css_code', data)
         console.log(`data:${data}`)
     })
 });
