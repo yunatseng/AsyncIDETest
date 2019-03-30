@@ -82,6 +82,7 @@ const store = new Vuex.Store({
     UPDATE_CODE(state, { type, code }) {
       console.log(`type:${type}`)
       state[type].code = code
+
     },
     UPDATE_TRANSFORMER(state, { type, transformer }) {
       state[type].transformer = transformer
@@ -131,8 +132,8 @@ const store = new Vuex.Store({
     }
   },
   actions: {
-    async updateCode({ commit }, payload) {
-      await commit('UPDATE_CODE', payload)
+    updateCode({ commit }, payload) {
+      commit('UPDATE_CODE', payload)
     },
     updateError({ commit }, payload) {
       commit('UPDATE_ERROR', payload)

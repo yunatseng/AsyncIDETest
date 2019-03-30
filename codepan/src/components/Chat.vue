@@ -47,22 +47,26 @@ export default {
     sendMessage(e) {
       e.preventDefault();
 
-      this.$socket.emit("SEND_MESSAGE", {
+      const messageData = {
         user: this.user,
         message: this.message,
         status: (this.status = "message")
-      });
+      };
+
+      this.messages.push(messageData);
+
+      this.$socket.emit("SEND_MESSAGE", messageData);
       this.message = "";
     }
   },
   mounted() {
-    console.log(this);
+    // console.log(this);
     this.sockets.subscribe("MESSAGE", data => {
       console.log(data);
       this.messages = [...this.messages, data];
       // you can also do this.messages.push(data)
     });
-    this.$socket.on("html_code", data => {
+    this.sockets.subscribe("html_code", data => {
       this.$store.dispatch("updateCode", { type: "html", code: data });
       this.$store.dispatch("editorChanged");
       console.log("html");

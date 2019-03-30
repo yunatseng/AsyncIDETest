@@ -176,7 +176,7 @@ export default {
           transform.html(this.html)
             .then(code => {
               html = code
-              this.socket.emit('html', code)
+              this.$socket.emit('html', code)
               // console.log(code)
             }),
           transform.css(this.css)
