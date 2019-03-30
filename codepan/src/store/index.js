@@ -82,6 +82,7 @@ const store = new Vuex.Store({
     UPDATE_CODE(state, { type, code }) {
       console.log(`type:${type}`)
       state[type].code = code
+      Vue.prototype.$socket.emit('html_code', code)
     },
     UPDATE_TRANSFORMER(state, { type, transformer }) {
       state[type].transformer = transformer
