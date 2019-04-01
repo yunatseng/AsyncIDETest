@@ -20,18 +20,23 @@ io.on('connection', function(socket) {
         io.emit('MESSAGE', data)
     });
     
-    socket.on('html', function(data) {
-        io.emit('html_code', data)
-        console.log(`data:${data}`)
-    })
+    socket.on('all', function(data) {
+        socket.broadcast.emit('code', data);
+        console.log(data);
+    });
+
+    // socket.on('html', function(data) {
+    //     io.emit('html_code', data)
+    //     console.log(`data:${data}`)
+    // })
     
-    socket.on('js', function(data) {
-        io.emit('js_code', data)
-        console.log(`data:${data}`)
-    })
+    // socket.on('js', function(data) {
+    //     io.emit('js_code', data)
+    //     console.log(`data:${data}`)
+    // })
     
-    socket.on('css', function(data) {
-        io.emit('css_code', data)
-        console.log(`data:${data}`)
-    })
+    // socket.on('css', function(data) {
+    //     io.emit('css_code', data)
+    //     console.log(`data:${data}`)
+    // })
 });

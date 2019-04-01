@@ -200,7 +200,7 @@
     methods.forEach(method => {
       // Create console method
       const originalMethod = console[method]
-      const originalClear = console.clear
+      // const originalClear = console.clear
       ProxyConsole.prototype[method] = function () {
         // Replace args that can't be sent through postMessage
         const originalArgs = [].slice.call(arguments)

@@ -16,6 +16,10 @@ const router = new Router({
       name: 'home',
       path: '/',
       component: EditorPage
+    },{
+      name: 'teacher',
+      path: '/:who',
+      component: EditorPage
     },
     {
       name: 'gist',

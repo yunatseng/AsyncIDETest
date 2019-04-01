@@ -8,16 +8,17 @@ import Event from '@/utils/event'
 import panPosition from '@/utils/pan-position'
 import { hasNextPan, getHumanlizedTransformerName, getEditorModeByTransfomer } from '@/utils'
 
+
 export default ({ name, editor, components } = {}) => {
   return {
     name: `${name}-pan`,
     data() {
       return {
-        style: {}
+        style: {},
       }
     },
     computed: {
-      ...mapState([name, 'visiblePans', 'activePan', 'autoRun']),
+      ...mapState([name, 'visiblePans', 'activePan', 'autoRun','socketId']),
       ...mapState({
         isVisible: state => state.visiblePans.indexOf(name) !== -1
       }),
@@ -47,8 +48,12 @@ export default ({ name, editor, components } = {}) => {
       },
       [`${name}.code`]() {
         // this.editor.focus()
-        this.editor.setValue(this[name].code)
-        this.editor.setCursor({line: 1, ch: 5})
+        let code = this[name].code;
+        if (code === this.localCode) return;
+
+        this.editor.setValue(code)
+        // this.editor.setCursor({line: 1, ch: 5})
+        this.editor.setCursor(this[name].position);
 
         if (this.autoRun) {
           this.debounceRunCode()
@@ -60,10 +65,21 @@ export default ({ name, editor, components } = {}) => {
         ...editor,
         readOnly: 'readonly' in this.$route.query
       })
-      this.editor.on('change', e => {
-        this.updateCode({ code: e.getValue(), type: name })
+      this.editor.on('change', (e, t) => {
+        
+        if (t.origin === 'setValue') return;
+        // this.localCode = e.getValue();
+        let id = this.socketId;
+        this.updateCode({ code: e.getValue(), type: name,position: e.getCursor() })
         this.editorChanged()
-        this.editor.focus()
+        this.setSenderId(id);
+        this.debounceEmitCode(this);
+
+        // this.editor.focus()
+        if (this.autoRun) {
+          this.debounceRunCode()
+        }
+      
       })
       this.editor.on('focus', () => {
         if (this.activePan !== name && this.visiblePans.indexOf(name) > -1) {
@@ -71,7 +87,7 @@ export default ({ name, editor, components } = {}) => {
         }
       })
       Event.$on('refresh-editor', () => {
-        // this.editor.setValue(this[name].code)
+        this.editor.setValue(this[name].code)
         this.editor.refresh()
       })
       // Focus the editor
@@ -89,14 +105,32 @@ export default ({ name, editor, components } = {}) => {
       })
     },
     methods: {
-      ...mapActions(['updateCode', 'updateTransformer', 'setActivePan', 'editorChanged']),
+      ...mapActions(['updateCode', 'updateTransformer', 'setActivePan', 'editorChanged','setSenderId']),
       async setTransformer(transformer) {
         await this.updateTransformer({ type: name, transformer })
       },
+      updateSize() {
+        // this.updateVuexSize(this.size);
+        this.debounceEmitCode('1');
+      },
+      debounceEmitCode: debounce((_that) => {
+        _that.$socket.emit('all', {
+          settings: {
+            js: _that.$store.state.js,
+            html: _that.$store.state.html,
+            css: _that.$store.state.css,
+          },
+          id: _that.$store.state.socketId
+        });
+      }, 500),
       debounceRunCode: debounce(() => {
-        Event.$emit('run')
+        Event.$emit('run');
+        // _that.$socket.emit(name, {
+        //   code: _that.localCode
+        // });
       }, 500)
     },
+
     components: {
       'el-dropdown': Dropdown,
       'el-dropdown-menu': DropdownMenu,

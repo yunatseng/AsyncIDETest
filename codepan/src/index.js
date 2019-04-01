@@ -27,11 +27,20 @@ Vue.use(new VueSocketIO({
 );
 
 new Vue({
+
   el: '#app',
+  sockets: {
+    connect: function () {
+        console.log('socket connected')
+        // app.$store.dispatch('setSocketId', $socket.id);
+    }},
   router,
   store,
   render: h => h(App)
 })
+
+
+
 
 if (process.env.NODE_ENV === 'production') {
   require('./pwa')

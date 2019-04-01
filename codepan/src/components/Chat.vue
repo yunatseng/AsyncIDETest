@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 export default {
   data() {
     return {
       user: "",
       message: "",
-      messages: [],
-      socket: io("localhost:3001")
+      messages: []
+      // socket: io("localhost:3001")
     };
   },
   methods: {
@@ -52,31 +52,48 @@ export default {
         status: (this.status = "message")
       };
 
-      this.messages.push(messageData);
+      // this.messages.push(messageData);
 
-      this.socket.emit("SEND_MESSAGE", messageData);
+      this.$socket.emit("SEND_MESSAGE", messageData);
       this.message = "";
     }
   },
   mounted() {
-    this.socket.on("MESSAGE", data => {
+    let vuexSocketId = this.$store.state.socketId;
+    this.sockets.subscribe("MESSAGE", data => {
       this.messages = [...this.messages, data];
       // you can also do this.messages.push(data)
     });
-    this.socket.on("html_code", data => {
-      this.$store.dispatch("updateCode", { type: "html", code: data });
+
+    this.sockets.subscribe("code", data => {
+      // if (vuexSocketId === data.id) return;
+      console.log(data);
+      Object.keys(data.settings).forEach(el => {
+        if (this.$store.state[el].code === data.settings[el].code) return;
+        this.$store.dispatch("updateCode", {
+          type: el,
+          code: data.settings[el].code,
+          position: data.settings[el].position
+        });
+      });
+      this.$store.dispatch("setSenderId", data.id);
       this.$store.dispatch("editorChanged");
-      console.log("html");
-      console.log(this.$store["html"]);
     });
-    this.socket.on("css_code", data => {
-      this.$store.dispatch("updateCode", { type: "css", code: data });
-      this.$store.dispatch("editorChanged");
-    });
-    this.socket.on("js_code", data => {
-      this.$store.dispatch("updateCode", { type: "js", code: data });
-      this.$store.dispatch("editorChanged");
-    });
+
+    // this.socket.on("html_code", data => {
+    //   this.$store.dispatch("updateCode", { type: "html", code: data });
+    //   this.$store.dispatch("editorChanged");
+    //   console.log("html");
+    //   console.log(this.$store["html"]);
+    // });
+    // this.socket.on("css_code", data => {
+    //   this.$store.dispatch("updateCode", { type: "css", code: data });
+    //   this.$store.dispatch("editorChanged");
+    // });
+    // this.socket.on("js_code", data => {
+    //   this.$store.dispatch("updateCode", { type: "js", code: data });
+    //   this.$store.dispatch("editorChanged");
+    // });
   }
 };
 </script>
