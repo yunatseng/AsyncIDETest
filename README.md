@@ -1,5 +1,7 @@
 # Synchronized Codepan
 
+Source from https://github.com/egoist/codepan
+
 ## require
 
 - Node 
