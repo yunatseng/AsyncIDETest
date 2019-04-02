@@ -1,15 +1,8 @@
 <template>
   <header class="home-header">
     <div class="home-header-left home-header-block">
-      <el-dropdown
-        @command="setBoilerplate"
-        trigger="click"
-        class="home-header-left-item">
-        <el-button
-          icon="el-icon-document"
-          size="mini">
-          樣板
-        </el-button>
+      <el-dropdown @command="setBoilerplate" trigger="click" class="home-header-left-item">
+        <el-button icon="el-icon-document" size="mini">樣板</el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="empty">Empty</el-dropdown-item>
           <el-dropdown-item command="vue">Vue</el-dropdown-item>
@@ -26,67 +19,48 @@
       <el-button
         v-if="!inIframe"
         class="home-header-left-item"
-        style="margin-right:0"
         icon="el-icon-plus"
         @click="promptLibrary"
-        size="mini">
-        新增套件
-      </el-button>
+        size="mini"
+      >新增套件</el-button>
+
+      <el-checkbox
+        border
+        size="mini"
+        v-if="$route.params.who === 'teacher'"
+        class="home-header-left-item"
+        @change="setConnectStatus"
+      >同步程式碼</el-checkbox>
+
       <span class="home-header-left-item changelog-indicator"></span>
     </div>
     <div class="home-header-middle home-header-block pan-toggles">
-      <span
-        class="pan-toggle"
-        :class="{visible: isVisible('html')}"
-        @click="togglePan('html')">
-        HTML
-      </span>
-      <span
-        class="pan-toggle"
-        :class="{visible: isVisible('css')}"
-        @click="togglePan('css')">
-        CSS
-      </span>
-      <span
-        class="pan-toggle"
-        :class="{visible: isVisible('js')}"
-        @click="togglePan('js')">
-        JS
-      </span>
+      <span class="pan-toggle" :class="{visible: isVisible('html')}" @click="togglePan('html')">HTML</span>
+      <span class="pan-toggle" :class="{visible: isVisible('css')}" @click="togglePan('css')">CSS</span>
+      <span class="pan-toggle" :class="{visible: isVisible('js')}" @click="togglePan('js')">JS</span>
       <span
         class="pan-toggle"
         :class="{visible: isVisible('console')}"
-        @click="togglePan('console')">
-        <el-badge
-          :is-dot="totalLogsCount > 0">
-          Console
-        </el-badge>
+        @click="togglePan('console')"
+      >
+        <el-badge :is-dot="totalLogsCount > 0">Console</el-badge>
       </span>
       <span
         class="pan-toggle"
         :class="{visible: isVisible('output')}"
-        @click="togglePan('output')">
-        Output
-      </span>
+        @click="togglePan('output')"
+      >Output</span>
     </div>
     <div class="home-header-right home-header-block">
-      <el-checkbox
-        border
-        size="mini"
-        :value="autoRun"
-        v-if="!inIframe"
-        @change="setAutoRun">
-        自動執行
-      </el-checkbox>
+      <el-checkbox border size="mini" :value="autoRun" v-if="!inIframe" @change="setAutoRun">自動執行</el-checkbox>
       <el-button
         :icon="iframeStatusIcon"
         size="mini"
         :type="iframeStatus === 'error' ? 'danger' : 'primary'"
         class="home-header-right-item"
         plain
-        @click="runCode">
-        執行
-      </el-button>
+        @click="runCode"
+      >執行</el-button>
       <el-button
         v-if="!inIframe"
         :icon="editorStatus === 'saving' ? 'el-icon-loading' : 'el-icon-upload2'"
@@ -96,24 +70,24 @@
         :title="saveButtonTitle"
         v-tippy="{position: 'bottom'}"
         class="home-header-right-item"
-        @click="saveGist">
-        儲存
-      </el-button>
+        @click="saveGist"
+      >儲存</el-button>
       <el-dropdown
         v-if="!inIframe"
         class="home-header-right-item home-header-more"
         @command="handleDropdownCommand"
-        trigger="click">
+        trigger="click"
+      >
         <el-button
           :icon="isLoggedIn ? '' : 'el-icon-more'"
-          size="mini">
-          {{ isLoggedIn ? username : '' }}
-        </el-button>
+          size="mini"
+        >{{ isLoggedIn ? username : '' }}</el-button>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item command="github-login">
             <div class="fake-anchor">
-              <log-out-icon v-if="githubToken" />
-              <github-icon v-else /> GitHub {{ githubToken ? '登出' : '登入' }}
+              <log-out-icon v-if="githubToken"/>
+              <github-icon v-else/>
+              GitHub {{ githubToken ? '登出' : '登入' }}
             </div>
           </el-dropdown-item>
           <el-dropdown-item
@@ -121,22 +95,36 @@
             command="save-new-gist"
             title="Create a new gist from editor"
             v-tippy="{position: 'left',arrow: true}"
-            v-if="canUpdateGist">
+            v-if="canUpdateGist"
+          >
             <div class="fake-anchor">
-              <git-branch-icon></git-branch-icon> Save new
+              <git-branch-icon></git-branch-icon>Save new
             </div>
           </el-dropdown-item>
           <el-dropdown-item style="padding: 0;">
-            <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://github.com/egoist/codepan"><link2-icon></link2-icon> 原始碼</a>
+            <a
+              class="el-dropdown-menu__item fake-anchor"
+              target="_blank"
+              href="https://github.com/egoist/codepan"
+            >
+              <link2-icon></link2-icon>原始碼
+            </a>
           </el-dropdown-item>
           <el-dropdown-item style="padding: 0;">
-            <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://twitter.com/_egoistlily"><twitter-icon></twitter-icon> Twitter 追蹤</a>
+            <a
+              class="el-dropdown-menu__item fake-anchor"
+              target="_blank"
+              href="https://twitter.com/_egoistlily"
+            >
+              <twitter-icon></twitter-icon>Twitter 追蹤
+            </a>
           </el-dropdown-item>
           <el-dropdown-item style="padding: 0;">
             <a
               target="_blank"
               class="el-dropdown-menu__item fake-anchor"
-              :href="`https://github.com/egoist/codepan/commit/${latestCommit}`">
+              :href="`https://github.com/egoist/codepan/commit/${latestCommit}`"
+            >
               <info-icon></info-icon>
               版本：{{ version }}
             </a>
@@ -149,7 +137,8 @@
         v-if="inIframe"
         class="home-header-right-item"
         :href="url"
-        target="_blank">
+        target="_blank"
+      >
         <img height="30" src="/favicon-180.png" alt="codepan">
       </a>
     </div>
@@ -157,174 +146,209 @@
 </template>
 
 <script>
-  import { mapState, mapActions, mapGetters } from 'vuex'
-  import { Button, Input, Badge, Dropdown, DropdownMenu, DropdownItem, MessageBox, Checkbox } from 'element-ui'
-  import Event from '@/utils/event'
-  import popup from '@/utils/popup'
-  import { inIframe } from '@/utils'
-  import notie from 'notie'
-  import {
+import { mapState, mapActions, mapGetters } from "vuex";
+import {
+  Button,
+  Input,
+  Badge,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  MessageBox,
+  Checkbox
+} from "element-ui";
+import Event from "@/utils/event";
+import popup from "@/utils/popup";
+import { inIframe } from "@/utils";
+import notie from "notie";
+import {
+  GithubIcon,
+  GitBranchIcon,
+  Link2Icon,
+  SaveIcon,
+  TwitterIcon,
+  LogOutIcon,
+  InfoIcon
+} from "vue-feather-icons";
+import SvgIcon from "./SvgIcon.vue";
+
+export default {
+  data() {
+    return {
+      version: process.env.VERSION,
+      latestCommit: process.env.LATEST_COMMIT,
+      inIframe,
+      url: window.location.href
+    };
+  },
+  computed: {
+    ...mapState([
+      "visiblePans",
+      "githubToken",
+      "editorStatus",
+      "autoRun",
+      "iframeStatus"
+    ]),
+    ...mapState({
+      totalLogsCount: state => state.logs.length,
+      username: state => state.userMeta && state.userMeta.login
+    }),
+    ...mapGetters(["isLoggedIn", "canUpdateGist"]),
+    iframeStatusIcon() {
+      switch (this.iframeStatus) {
+        case "loading":
+          return "el-icon-loading";
+        case "error":
+          return "el-icon-warning";
+        default:
+          return "el-icon-refresh";
+      }
+    },
+    saveButtonTitle() {
+      if (this.isLoggedIn) {
+        return this.canUpdateGist ? "Update this gist" : "Create new gist";
+      }
+      return "Login to save";
+    }
+  },
+  mounted() {
+    window.addEventListener("keydown", this.handleKeydown);
+    Event.$on("showLogin", () => this.githubLogin());
+  },
+  beforeDestroy() {
+    window.removeEventListener("keydown", this.handleKeydown);
+  },
+  methods: {
+    ...mapActions(["togglePan", "updateCode"]),
+    handleKeydown(e) {
+      if (e.which === 83 && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        this.runCode();
+      }
+    },
+    setConnectStatus(e) {
+      console.log("😏");
+      let status = e.target.checked;
+      this.$socket.emit("broadcastStatus", status);
+    },
+    setAutoRun(status) {
+      this.$store.dispatch("setAutoRun", status);
+    },
+    async promptLibrary() {
+      const { value } = await MessageBox.prompt(
+        "請輸入欲加入的 npm 套件名稱:",
+        "新增套件",
+        {
+          confirmButtonText: "確定",
+          cancelButtonText: "取消"
+        }
+      );
+      this.addLibrary(value);
+    },
+    async addLibrary(name) {
+      if (name) {
+        const code =
+          `&lt;script src="https://unpkg.com/${name}">&lt;/script>\n`.replace(
+            /&lt;/g,
+            "<"
+          ) + this.$store.state.html.code;
+        await this.updateCode({ type: "html", code });
+        Event.$emit("refresh-editor");
+      }
+    },
+    async setBoilerplate(boilerplate) {
+      this.$router.push({
+        name: "boilerplate",
+        params: {
+          boilerplate
+        }
+      });
+    },
+    isVisible(pan) {
+      return this.visiblePans.indexOf(pan) !== -1;
+    },
+    runCode() {
+      Event.$emit("run");
+    },
+    saveGist() {
+      if (!this.isLoggedIn) {
+        return this.githubLogin();
+      }
+      Event.$emit("save-gist");
+    },
+    handleDropdownCommand(command) {
+      if (command === "save-new-gist") {
+        Event.$emit("save-gist", true);
+      } else if (command === "github-login") {
+        if (this.githubToken) {
+          this.$store.dispatch("setGitHubToken", null);
+          notie.alert({
+            type: "success",
+            text: `Done, you've been successfully logged out!`
+          });
+        } else {
+          this.githubLogin();
+        }
+      }
+    },
+    githubLogin() {
+      notie.select({
+        text: "Choose the way to login to GitHub",
+        choices: [
+          {
+            text: "Token",
+            handler: () => {
+              this.promptGitHubToken();
+            }
+          },
+          {
+            text: "OAuth",
+            type: 2,
+            handler: () => {
+              const loginURL =
+                process.env.NODE_ENV === "development"
+                  ? "http://localhost:4001/login"
+                  : "https://gh-login.codepan.net/login";
+
+              popup(loginURL, "gh login", 600, 400);
+            }
+          }
+        ]
+      });
+    },
+    promptGitHubToken() {
+      notie.input({
+        text: "Please set your personal access token for GitHub Gist",
+        submitCallback: value => {
+          this.$store.dispatch("setGitHubToken", value);
+          notie.alert({
+            type: "success",
+            time: 6,
+            text:
+              "Done, now you can save your code to GitHub Gist under your account!"
+          });
+        }
+      });
+    }
+  },
+  components: {
+    "el-dropdown": Dropdown,
+    "el-dropdown-menu": DropdownMenu,
+    "el-dropdown-item": DropdownItem,
+    "el-button": Button,
+    "el-input": Input,
+    "el-badge": Badge,
+    "el-checkbox": Checkbox,
     GithubIcon,
     GitBranchIcon,
     Link2Icon,
     SaveIcon,
     TwitterIcon,
+    SvgIcon,
     LogOutIcon,
     InfoIcon
-  } from 'vue-feather-icons'
-  import SvgIcon from './SvgIcon.vue'
-
-  export default {
-    data() {
-      return {
-        version: process.env.VERSION,
-        latestCommit: process.env.LATEST_COMMIT,
-        inIframe,
-        url: window.location.href
-      }
-    },
-    computed: {
-      ...mapState(['visiblePans', 'githubToken', 'editorStatus', 'autoRun', 'iframeStatus']),
-      ...mapState({
-        totalLogsCount: state => state.logs.length,
-        username: state => state.userMeta && state.userMeta.login
-      }),
-      ...mapGetters(['isLoggedIn', 'canUpdateGist']),
-      iframeStatusIcon() {
-        switch (this.iframeStatus) {
-          case 'loading':
-            return 'el-icon-loading'
-          case 'error':
-            return 'el-icon-warning'
-          default:
-            return 'el-icon-refresh'
-        }
-      },
-      saveButtonTitle() {
-        if (this.isLoggedIn) {
-          return this.canUpdateGist ? 'Update this gist' : 'Create new gist'
-        }
-        return 'Login to save'
-      }
-    },
-    mounted() {
-      window.addEventListener('keydown', this.handleKeydown)
-      Event.$on('showLogin', () => this.githubLogin())
-    },
-    beforeDestroy() {
-      window.removeEventListener('keydown', this.handleKeydown)
-    },
-    methods: {
-      ...mapActions(['togglePan', 'updateCode']),
-      handleKeydown(e) {
-        if (e.which === 83 && (e.metaKey || e.ctrlKey)) {
-          e.preventDefault()
-          this.runCode()
-        }
-      },
-      setAutoRun(status) {
-        this.$store.dispatch('setAutoRun', status)
-      },
-      async promptLibrary() {
-        const { value } = await MessageBox.prompt('請輸入欲加入的 npm 套件名稱:', '新增套件', {
-          confirmButtonText: '確定',
-          cancelButtonText: '取消'
-        })
-        this.addLibrary(value)
-      },
-      async addLibrary(name) {
-        if (name) {
-          const code = `&lt;script src="https://unpkg.com/${name}">&lt;/script>\n`.replace(/&lt;/g, '<') + this.$store.state.html.code
-          await this.updateCode({ type: 'html', code })
-          Event.$emit('refresh-editor')
-        }
-      },
-      async setBoilerplate(boilerplate) {
-        this.$router.push({
-          name: 'boilerplate',
-          params: {
-            boilerplate
-          }
-        })
-      },
-      isVisible(pan) {
-        return this.visiblePans.indexOf(pan) !== -1
-      },
-      runCode() {
-        Event.$emit('run')
-      },
-      saveGist() {
-        if (!this.isLoggedIn) {
-          return this.githubLogin()
-        }
-        Event.$emit('save-gist')
-      },
-      handleDropdownCommand(command) {
-        if (command === 'save-new-gist') {
-          Event.$emit('save-gist', true)
-        } else if (command === 'github-login') {
-          if (this.githubToken) {
-            this.$store.dispatch('setGitHubToken', null)
-            notie.alert({
-              type: 'success',
-              text: `Done, you've been successfully logged out!`
-            })
-          } else {
-            this.githubLogin()
-          }
-        }
-      },
-      githubLogin() {
-        notie.select({
-          text: 'Choose the way to login to GitHub',
-          choices: [{
-            text: 'Token',
-            handler: () => {
-              this.promptGitHubToken()
-            }
-          }, {
-            text: 'OAuth',
-            type: 2,
-            handler: () => {
-              const loginURL = process.env.NODE_ENV === 'development' ? 'http://localhost:4001/login' : 'https://gh-login.codepan.net/login'
-
-              popup(loginURL, 'gh login', 600, 400)
-            }
-          }]
-        })
-      },
-      promptGitHubToken() {
-        notie.input({
-          text: 'Please set your personal access token for GitHub Gist',
-          submitCallback: value => {
-            this.$store.dispatch('setGitHubToken', value)
-            notie.alert({
-              type: 'success',
-              time: 6,
-              text: 'Done, now you can save your code to GitHub Gist under your account!'
-            })
-          }
-        })
-      }
-    },
-    components: {
-      'el-dropdown': Dropdown,
-      'el-dropdown-menu': DropdownMenu,
-      'el-dropdown-item': DropdownItem,
-      'el-button': Button,
-      'el-input': Input,
-      'el-badge': Badge,
-      'el-checkbox': Checkbox,
-      GithubIcon,
-      GitBranchIcon,
-      Link2Icon,
-      SaveIcon,
-      TwitterIcon,
-      SvgIcon,
-      LogOutIcon,
-      InfoIcon
-    }
   }
+};
 </script>
 
 <style lang="stylus" scoped>

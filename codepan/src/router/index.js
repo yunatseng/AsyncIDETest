@@ -17,8 +17,8 @@ const router = new Router({
       path: '/',
       component: EditorPage
     },{
-      name: 'teacher',
-      path: '/:who',
+      name: 'identity',
+      path: '/:who', //身分判斷，如果 who === 'teacher'，控制是否同步程式的按鈕才會出現。
       component: EditorPage
     },
     {

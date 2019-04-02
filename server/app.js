@@ -3,7 +3,7 @@ const express = require('express');
 
 
 const app = express();
-
+let isConnectable = false;
 
 
 const server = app.listen(3001, function() {
@@ -14,13 +14,18 @@ const server = app.listen(3001, function() {
 const io = require('socket.io')(server);
 
 io.on('connection', function(socket) {
-    console.log(socket.id)
+    // console.log(socket.id)
+    socket.on('broadcastStatus',function(data){
+        isConnectable = data;
+    })
+
     socket.on('SEND_MESSAGE', function(data) {
         console.log(data)
         io.emit('MESSAGE', data)
     });
     
     socket.on('all', function(data) {
+        if(isConnectable === false) return;
         socket.broadcast.emit('code', data);
         console.log(data);
     });

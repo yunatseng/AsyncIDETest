@@ -32,7 +32,7 @@ new Vue({
   sockets: {
     connect: function () {
         console.log('socket connected')
-        // app.$store.dispatch('setSocketId', $socket.id);
+        // 
     }},
   router,
   store,

@@ -83,7 +83,7 @@ const store = new Vuex.Store({
     iframeStatus: null,
     transforming: false,
     socketId:"",
-    sender: ""
+    sender: "",
   },
   mutations: {
     UPDATE_CODE(state, { type, code, position }) {
