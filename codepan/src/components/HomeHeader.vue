@@ -29,7 +29,7 @@
         size="mini"
         v-if="$route.params.who === 'teacher'"
         class="home-header-left-item"
-        @change="setConnectStatus"
+        @change="setConnectStatus($event)"
       >同步程式碼</el-checkbox>
 
       <span class="home-header-left-item changelog-indicator"></span>
