@@ -29,7 +29,8 @@
         size="mini"
         v-if="$route.params.who === 'teacher'"
         class="home-header-left-item"
-        @change="setConnectStatus($event)"
+        v-model="checked"
+        @change="setConnectStatus()"
       >同步程式碼</el-checkbox>
 
       <span class="home-header-left-item changelog-indicator"></span>
@@ -178,7 +179,8 @@ export default {
       version: process.env.VERSION,
       latestCommit: process.env.LATEST_COMMIT,
       inIframe,
-      url: window.location.href
+      url: window.location.href,
+      checked:false
     };
   },
   computed: {
@@ -226,10 +228,9 @@ export default {
         this.runCode();
       }
     },
-    setConnectStatus(e) {
-      console.log("😏");
-      let status = e.target.checked;
-      this.$socket.emit("broadcastStatus", status);
+    setConnectStatus() {
+      console.log("😏",this.checked);
+      this.$socket.emit("broadcastStatus", this.checked);
     },
     setAutoRun(status) {
       this.$store.dispatch("setAutoRun", status);
