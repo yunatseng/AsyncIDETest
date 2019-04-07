@@ -1,6 +1,6 @@
 import { mapActions, mapState } from 'vuex'
 import debounce from 'debounce'
-import { Dropdown, DropdownMenu, DropdownItem } from 'element-ui'
+import { Dropdown, DropdownMenu, DropdownItem, Button } from 'element-ui'
 import PanResizer from '@/components/PanResizer.vue'
 import CompiledCodeSwitcher from '@/components/CompiledCodeSwitcher.vue'
 import createEditor from '@/utils/create-editor'
@@ -66,7 +66,7 @@ export default ({ name, editor, components } = {}) => {
         readOnly: 'readonly' in this.$route.query
       })
       this.editor.on('change', (e, t) => {
-        
+
         if (t.origin === 'setValue') return;
         // this.localCode = e.getValue();
         let id = this.socketId;
@@ -79,7 +79,7 @@ export default ({ name, editor, components } = {}) => {
         if (this.autoRun) {
           this.debounceRunCode()
         }
-      
+
       })
       this.editor.on('focus', () => {
         if (this.activePan !== name && this.visiblePans.indexOf(name) > -1) {
@@ -135,6 +135,7 @@ export default ({ name, editor, components } = {}) => {
       'el-dropdown': Dropdown,
       'el-dropdown-menu': DropdownMenu,
       'el-dropdown-item': DropdownItem,
+      'el-button':Button,
       PanResizer,
       CompiledCodeSwitcher,
       ...components
