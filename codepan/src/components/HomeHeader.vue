@@ -180,7 +180,7 @@ export default {
       latestCommit: process.env.LATEST_COMMIT,
       inIframe,
       url: window.location.href,
-      checked:false
+      checked: false
     };
   },
   computed: {
@@ -229,7 +229,10 @@ export default {
       }
     },
     setConnectStatus() {
-      console.log("😏",this.checked);
+      if (this.checked) {
+        // Event.$emit('all');
+        console.log("😏", this.checked);
+      }
       this.$socket.emit("broadcastStatus", this.checked);
     },
     setAutoRun(status) {
