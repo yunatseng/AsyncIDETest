@@ -229,11 +229,19 @@ export default {
       }
     },
     setConnectStatus() {
-      if (this.checked) {
+      this.$socket.emit("broadcastStatus", this.checked);
+            if (this.checked) {
         // Event.$emit('all');
+        this.$socket.emit('all', {
+          settings: {
+            js: this.$store.state.js,
+            html: this.$store.state.html,
+            css: this.$store.state.css,
+          },
+          id: this.$store.state.socketId
+        });
         console.log("😏", this.checked);
       }
-      this.$socket.emit("broadcastStatus", this.checked);
     },
     setAutoRun(status) {
       this.$store.dispatch("setAutoRun", status);
@@ -356,79 +364,103 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.home-header
+.home-header {
   height: 40px;
-  border-bottom: 1px solid #bfbfbf
-  background-color: white
-  display: flex
-  align-items: center
-  padding: 0 10px
-  justify-content: space-between
+  border-bottom: 1px solid #bfbfbf;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  justify-content: space-between;
+}
 
-.home-header-block
-  flex: 1
-  width: 0
+.home-header-block {
+  flex: 1;
+  width: 0;
+}
 
-.home-header-left
-  display: flex
-  justify-content: flex-start
-  .home-header-left-item
-    margin-right: 10px
+.home-header-left {
+  display: flex;
+  justify-content: flex-start;
 
-.home-header-right
-  display: flex
-  justify-content: flex-end
-  align-items: center
-  .home-header-right-item
-    margin-left: 10px
+  .home-header-left-item {
+    margin-right: 10px;
+  }
+}
 
-.changelog-indicator
-  display: flex
-  align-items: center
-  height: 28px
+.home-header-right {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 
-.pan-toggles
-  display: flex
-  justify-content: center
-  height: 100%
+  .home-header-right-item {
+    margin-left: 10px;
+  }
+}
 
-  .pan-toggle
-    display: flex
-    align-items: center
-    height: 100%
-    border-left: 1px solid #e2e2e2
-    border-right: @border-left
-    position: relative
-    padding: 0 10px
-    cursor: pointer
-    user-select: none
+.changelog-indicator {
+  display: flex;
+  align-items: center;
+  height: 28px;
+}
 
-    &:not(:first-child)
-      margin-left: -1px
+.pan-toggles {
+  display: flex;
+  justify-content: center;
+  height: 100%;
 
-    &:hover
-      &:not(.visible)
-        background-color: #f9f9f9
+  .pan-toggle {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    border-left: 1px solid #e2e2e2;
+    border-right: @border-left;
+    position: relative;
+    padding: 0 10px;
+    cursor: pointer;
+    user-select: none;
 
-    &.visible
-      background-color: #EBF3FF
+    &:not(:first-child) {
+      margin-left: -1px;
+    }
 
-.editor-save-status
-  display: flex
-  align-items: center
-  color: #607d8b
-  .svg-icon
-    display: flex
-    align-items: center
-    margin-right: 5px
-  >>> svg
-    fill: @color
-    width: 16px
-    height: @width
+    &:hover {
+      &:not(.visible) {
+        background-color: #f9f9f9;
+      }
+    }
 
-@media screen and (max-width: 768px)
-  .home-header-left
-    display: none
-  .pan-toggles
-    justify-content: left
+    &.visible {
+      background-color: #EBF3FF;
+    }
+  }
+}
+
+.editor-save-status {
+  display: flex;
+  align-items: center;
+  color: #607d8b;
+
+  .svg-icon {
+    display: flex;
+    align-items: center;
+    margin-right: 5px;
+  }
+
+  >>> svg {
+    fill: @color;
+    width: 16px;
+    height: @width;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .home-header-left {
+    display: none;
+  }
+
+  .pan-toggles {
+    justify-content: left;
+  }
+}
 </style>

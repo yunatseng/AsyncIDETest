@@ -15,12 +15,17 @@
           <el-dropdown-item command="markdown">Markdown</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-<div>      <el-button border
-        size="mini">+</el-button>
-<el-button border
-        size="mini">-</el-button>
-      <compiled-code-switcher type="html" v-if="html.code"></compiled-code-switcher></div>
-
+      <div>
+        <el-button
+          border
+          size="mini"
+          @click="bigger">+</el-button>
+        <el-button
+          border
+          size="mini"
+          @click="smaller">-</el-button>
+        <compiled-code-switcher type="html" v-if="html.code"></compiled-code-switcher>
+      </div>
     </div>
     <textarea ref="editor">{{ html.code }}</textarea>
     <pan-resizer pan="html" :enable="enableResizer" />
@@ -35,6 +40,6 @@
     editor: {
       mode: 'htmlmixed',
       autoCloseTags: true
-    }
+    },
   })
 </script>

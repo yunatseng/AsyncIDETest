@@ -80,6 +80,10 @@ export default {
       this.$store.dispatch("editorChanged");
     });
 
+    this.sockets.subscribe("fontsize",data=>{
+    this.$store.dispatch("getFontSize",data)
+    })
+
     // this.socket.on("html_code", data => {
     //   this.$store.dispatch("updateCode", { type: "html", code: data });
     //   this.$store.dispatch("editorChanged");

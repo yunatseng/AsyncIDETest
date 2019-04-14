@@ -34,17 +34,20 @@ const emptyPans = () => ({
   js: {
     code: '',
     transformer: 'js',
-    position:  {line: 0, ch: 0, sticky: null}
+    position:  {line: 0, ch: 0, sticky: null},
+    fontSize:''
   },
   css: {
     code: '',
     transformer: 'css',
-    position:  {line: 0, ch: 0, sticky: null}
+    position:  {line: 0, ch: 0, sticky: null},
+    fontSize:''
   },
   html: {
     code: '',
     transformer: 'html',
-    position:  {line: 0, ch: 0, sticky: null}
+    position:  {line: 0, ch: 0, sticky: null},
+    fontSize:''
   }
 })
 
@@ -87,10 +90,13 @@ const store = new Vuex.Store({
   },
   mutations: {
     UPDATE_CODE(state, { type, code, position }) {
-      console.log(`type:${type}`)
+      console.log(`type:${type}`+position)
       state[type].code = code
       state[type].position = position
       // Vue.prototype.$socket.emit('html_code', code)
+    },
+    UPDATE_FONTSIZE(state,{name,fontSize}){
+      state[name].fontSize = fontSize;
     },
     SET_SENDER(state, id) {
       state.sender = id;
@@ -148,6 +154,9 @@ const store = new Vuex.Store({
     },
     setSenderId({commit}, payload) {
       commit('SET_SENDER', payload);
+    },
+    getFontSize({commit}, payload) {
+      commit('UPDATE_FONTSIZE',payload)
     },
     updateError({ commit }, payload) {
       commit('UPDATE_ERROR', payload)
