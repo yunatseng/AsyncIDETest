@@ -18,7 +18,7 @@ io.on("connection", function(socket) {
 
   socket.on("fontsize", function(data) {
     console.log(data);
-    socket.broadcast.emit("fontsize", data);
+    socket.emit("fontsize", data);
   });
 
   socket.on("SEND_MESSAGE", function(data) {

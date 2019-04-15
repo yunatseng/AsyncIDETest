@@ -230,13 +230,13 @@ export default {
     },
     setConnectStatus() {
       this.$socket.emit("broadcastStatus", this.checked);
-            if (this.checked) {
+      if (this.checked) {
         // Event.$emit('all');
-        this.$socket.emit('all', {
+        this.$socket.emit("all", {
           settings: {
             js: this.$store.state.js,
             html: this.$store.state.html,
-            css: this.$store.state.css,
+            css: this.$store.state.css
           },
           id: this.$store.state.socketId
         });

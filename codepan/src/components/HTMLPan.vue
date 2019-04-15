@@ -19,11 +19,11 @@
         <el-button
           border
           size="mini"
-          @click="bigger">+</el-button>
+          @click="setFontSize('add')">+</el-button>
         <el-button
           border
           size="mini"
-          @click="smaller">-</el-button>
+          @click="setFontSize('minus')">-</el-button>
         <compiled-code-switcher type="html" v-if="html.code"></compiled-code-switcher>
       </div>
     </div>

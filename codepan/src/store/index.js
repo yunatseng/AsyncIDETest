@@ -150,7 +150,11 @@ const store = new Vuex.Store({
   },
   actions: {
     async updateCode({ commit }, payload) {
-      await commit('UPDATE_CODE', payload)
+      // return new Promise((resolve, reject) => {
+        await commit('UPDATE_CODE', payload);
+        // resolve();
+      // })
+      
     },
     setSenderId({commit}, payload) {
       commit('SET_SENDER', payload);

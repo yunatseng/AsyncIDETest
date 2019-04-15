@@ -50,13 +50,18 @@ export default ({ name, editor, components } = {}) => {
         this.editor.setOption("mode", mode);
       },
       [`${name}.fontSize`]() {
-        let fs = this[name].fontSize;
-        this.style = {
-          ...this.style,
-          fontSize: `${fs}px`
-        };
+        // let fs = this[name].fontSize;
+        // this.style = {
+        //   ...this.style,
+        //   fontSize: `${fs}px`
+        // };
+        let code = this[name].code;
+        this.editor.setValue(code);
+        this.editor.setCursor(this[name].position);
+        // console.log(this[name].position);
       },
       [`${name}.code`]() {
+        console.log("watcher called");
         // this.editor.focus()
         let code = this[name].code;
         if (code === this.localCode) return;
@@ -64,7 +69,7 @@ export default ({ name, editor, components } = {}) => {
         this.editor.setValue(code);
         // this.editor.setCursor({line: 1, ch: 5})
         this.editor.setCursor(this[name].position);
-        console.log(this[name].position);
+        // console.log(this[name].position);
 
         if (this.autoRun) {
           this.debounceRunCode();
@@ -123,7 +128,8 @@ export default ({ name, editor, components } = {}) => {
         "updateTransformer",
         "setActivePan",
         "editorChanged",
-        "setSenderId"
+        "setSenderId",
+        "getFontSize"
       ]),
       async setTransformer(transformer) {
         await this.updateTransformer({ type: name, transformer });
@@ -146,17 +152,36 @@ export default ({ name, editor, components } = {}) => {
         // });
       }, 500),
 
-      bigger() {
+      setFontSize(type) {
+        const size = 3;
+
         const target = document.querySelector(`.${name}-pan .CodeMirror-sizer`);
-        let currentFontSize = +window
-          .getComputedStyle(target)
-          ["font-size"].replace("px", "");
-        console.log(currentFontSize, name);
+
+        let currentFontSize = parseInt(
+          window.getComputedStyle(target)["font-size"]
+        );
+
+        let newFontSize =
+          type === "add" ? currentFontSize + size : currentFontSize - size;
 
         this.style = {
           ...this.style,
-          fontSize: `${currentFontSize + 3}px`
+          fontSize: `${newFontSize}px`
         };
+
+        this.updateCode({
+          code: this[name].code,
+          type: name,
+          position: this.editor.getCursor()
+        });
+
+        // this.getFontSize({ name, fontSize: currentFontSize });
+
+        // this.editor.setValue(this[name].code + ' ');
+        // this.editor.setValue(this[name].code);
+
+        // this.editor.setCursor(this[name].position);
+
         this.$socket.emit("fontsize", { name, fontSize: currentFontSize + 3 });
       },
 
