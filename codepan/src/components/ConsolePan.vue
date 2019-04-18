@@ -3,20 +3,26 @@
     class="console-pan"
     :class="{'active-pan': isActivePan}"
     @click="setActivePan('console')"
-    :style="style">
+    :style="style"
+  >
     <div class="pan-head">
-      <el-badge
-        :value="logs.length"
-        :max="99">
-        Console
-      </el-badge>
-      <el-button
-        icon="el-icon-delete"
-        size="mini"
-        v-show="logs.length"
-        @click="clearLogs">
-        Clear
-      </el-button>
+      <el-badge :value="logs.length" :max="99">Console</el-badge>
+      <div>
+        <el-button
+          border
+          size="mini"
+          v-if="$route.params.who === 'teacher'"
+          @click="setFontSize('add')"
+        >+</el-button>
+        <el-button
+          border
+          size="mini"
+          v-if="$route.params.who === 'teacher'"
+          @click="setFontSize('minus')"
+        >-</el-button>
+
+        <el-button icon="el-icon-delete" size="mini" v-show="logs.length" @click="clearLogs">Clear</el-button>
+      </div>
     </div>
     <div class="console-logs" ref="console">
       <div
@@ -24,72 +30,102 @@
         :class="`console-log-${log.type}`"
         :key="index"
         v-html="highlight(log.message)"
-        v-for="(log, index) in logs">
-      </div>
+        v-for="(log, index) in logs"
+      ></div>
     </div>
-    <pan-resizer pan="console" :enable="enableResizer" />
+    <pan-resizer pan="console" :enable="enableResizer"/>
   </div>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
-  import { Badge, Button } from 'element-ui'
-  import panPosition from '@/utils/pan-position'
-  import PanResizer from '@/components/PanResizer.vue'
-  import { hasNextPan } from '@/utils'
-  import CodeMirror from 'codemirror'
-  import '@/utils/highlight'
-  import Event from '@/utils/event'
+import { mapState, mapActions } from "vuex";
+import { Badge, Button } from "element-ui";
+import panPosition from "@/utils/pan-position";
+import PanResizer from "@/components/PanResizer.vue";
+import { hasNextPan } from "@/utils";
+import CodeMirror from "codemirror";
+import "@/utils/highlight";
+import Event from "@/utils/event";
 
-  export default {
-    data() {
-      return {
-        style: {}
+export default {
+  data() {
+    return {
+      style: {}
+    };
+  },
+  watch: {
+    logs() {
+      const { console } = this.$refs;
+      this.$nextTick(() => {
+        console.scrollTop = console.scrollHeight;
+      });
+    },
+    visiblePans: {
+      immediate: true,
+      handler(val) {
+        this.style = panPosition(val, "console");
       }
-    },
-    watch: {
-      logs() {
-        const { console } = this.$refs
-        this.$nextTick(() => {
-          console.scrollTop = console.scrollHeight
-        })
-      },
-      visiblePans: {
-        immediate: true,
-        handler(val) {
-          this.style = panPosition(val, 'console')
-        }
-      }
-    },
-    mounted() {
-      Event.$on(`set-console-pan-style`, style => {
-        this.style = {
-          ...this.style,
-          ...style
-        }
-      })
-    },
-    computed: {
-      ...mapState(['logs', 'visiblePans', 'activePan']),
-      enableResizer() {
-        return hasNextPan(this.visiblePans, 'console')
-      },
-      isActivePan() {
-        return this.activePan === 'console'
-      }
-    },
-    methods: {
-      ...mapActions(['clearLogs', 'setActivePan']),
-      highlight(value) {
-        return CodeMirror.highlight(value, { mode: 'javascript' })
-      }
-    },
-    components: {
-      'el-badge': Badge,
-      'el-button': Button,
-      'pan-resizer': PanResizer
     }
+  },
+  mounted() {
+    Event.$on(`set-console-pan-style`, style => {
+      this.style = {
+        ...this.style,
+        ...style
+      };
+    });
+  },
+  computed: {
+    ...mapState(["logs", "visiblePans", "activePan"]),
+    enableResizer() {
+      return hasNextPan(this.visiblePans, "console");
+    },
+    isActivePan() {
+      return this.activePan === "console";
+    }
+  },
+  methods: {
+    ...mapActions(["clearLogs", "setActivePan"]),
+    highlight(value) {
+      return CodeMirror.highlight(value, { mode: "javascript" });
+    },
+
+    setFontSize(type) {
+      const size = 3;
+
+      const target = document.querySelectorAll(`.console-logs .console-log`);
+      console.log(target);
+
+      let currentFontSize = parseInt(
+        window.getComputedStyle(target[0])["font-size"]
+      );
+      console.log(currentFontSize);
+
+      let newFontSize =
+        type === "add" ? currentFontSize + size : currentFontSize - size;
+
+      console.log(newFontSize);
+
+      //       // target.style.fontSize = `${newFontSize}px`;
+      // for ( var i = 0; i < target.length; i ++ ) {
+      //     target[i].style.fontSize = `${newFontSize}px`;
+      // }
+
+      Event.$emit("set-console-pan-style", {
+        fontSize: `${newFontSize}px`
+      });
+      // this.style = {
+      //   ...this.style,
+      //   fontSize: `${newFontSize}px`
+      // };
+    }
+  },
+  components: {
+    "el-badge": Badge,
+    "el-button": Button,
+    "pan-resizer": PanResizer
   }
+};
 </script>
 
 <style lang="stylus" scoped>
@@ -99,7 +135,7 @@
 
 .console-log
   white-space: pre
-  font-size: 13px
+  // font-size: 13px
   padding: 10px
   border-bottom: 1px solid #efefef
 

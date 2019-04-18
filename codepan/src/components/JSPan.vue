@@ -21,7 +21,21 @@
         </el-dropdown-menu>
       </el-dropdown>
       <div class="pan-head-right">
-        <compiled-code-switcher type="js" v-if="js.code"></compiled-code-switcher>
+        <div>
+          <el-button
+            border
+            size="mini"
+            v-if="$route.params.who === 'teacher'"
+            @click="setFontSize('add')"
+          >+</el-button>
+          <el-button
+            border
+            size="mini"
+            v-if="$route.params.who === 'teacher'"
+            @click="setFontSize('minus')"
+          >-</el-button>
+          <compiled-code-switcher type="js" v-if="js.code"></compiled-code-switcher>
+        </div>
       </div>
     </div>
     <textarea ref="editor">{{ js.code }}</textarea>

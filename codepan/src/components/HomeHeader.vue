@@ -30,6 +30,8 @@
         v-if="$route.params.who === 'teacher'"
         class="home-header-left-item"
         v-model="checked"
+        title="勾選後 socket 連線即保持開啟"
+        v-tippy="{position: 'bottom'}"
         @change="setConnectStatus()"
       >同步程式碼</el-checkbox>
 
