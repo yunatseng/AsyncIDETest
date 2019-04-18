@@ -94,17 +94,17 @@ export default {
       const size = 3;
 
       const target = document.querySelectorAll(`.console-logs .console-log`);
-      console.log(target);
+      // console.log(target);
 
       let currentFontSize = parseInt(
         window.getComputedStyle(target[0])["font-size"]
       );
-      console.log(currentFontSize);
+      // console.log(currentFontSize);
 
       let newFontSize =
         type === "add" ? currentFontSize + size : currentFontSize - size;
 
-      console.log(newFontSize);
+      // console.log(newFontSize);
 
       //       // target.style.fontSize = `${newFontSize}px`;
       // for ( var i = 0; i < target.length; i ++ ) {

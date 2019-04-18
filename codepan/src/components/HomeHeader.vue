@@ -242,7 +242,7 @@ export default {
           },
           id: this.$store.state.socketId
         });
-        console.log("😏", this.checked);
+        // console.log("😏", this.checked);
       }
     },
     setAutoRun(status) {

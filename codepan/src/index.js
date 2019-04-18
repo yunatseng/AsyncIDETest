@@ -31,7 +31,7 @@ new Vue({
   el: '#app',
   sockets: {
     connect: function () {
-        console.log('socket connected')
+        // console.log('socket connected')
         // 
     }},
   router,

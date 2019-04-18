@@ -90,7 +90,7 @@ const store = new Vuex.Store({
   },
   mutations: {
     UPDATE_CODE(state, { type, code, position }) {
-      console.log(`type:${type}`+position)
+      // console.log(`type:${type}`+position)
       state[type].code = code
       state[type].position = position
       // Vue.prototype.$socket.emit('html_code', code)

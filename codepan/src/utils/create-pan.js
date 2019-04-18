@@ -61,7 +61,7 @@ export default ({ name, editor, components } = {}) => {
         // console.log(this[name].position);
       },
       [`${name}.code`]() {
-        console.log("watcher called");
+        // console.log("watcher called");
         // this.editor.focus()
         let code = this[name].code;
         if (code === this.localCode) return;
@@ -156,12 +156,12 @@ export default ({ name, editor, components } = {}) => {
         const size = 3;
 
         const target = document.querySelector(`.${name}-pan .CodeMirror-sizer`);
-        console.log(target,'px');
+        // console.log(target,'px');
 
         let currentFontSize = parseInt(
           window.getComputedStyle(target)["font-size"]
         );
-        console.log(currentFontSize,'px');
+        // console.log(currentFontSize,'px');
 
         let newFontSize =
           type === "add" ? currentFontSize + size : currentFontSize - size;

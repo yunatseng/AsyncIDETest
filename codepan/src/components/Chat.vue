@@ -67,7 +67,7 @@ export default {
 
     this.sockets.subscribe("code", data => {
       // if (vuexSocketId === data.id) return;
-      console.log(data);
+      // console.log(data);
       Object.keys(data.settings).forEach(el => {
         if (this.$store.state[el].code === data.settings[el].code) return;
         this.$store.dispatch("updateCode", {
@@ -82,7 +82,7 @@ export default {
 
     this.sockets.subscribe("fontsize", data => {
       this.$store.dispatch("getFontSize", data);
-      console.log("change font size");
+      // console.log("change font size");
     });
 
     // this.socket.on("html_code", data => {
